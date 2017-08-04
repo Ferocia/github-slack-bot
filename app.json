@@ -1,0 +1,29 @@
+{
+  "name": "Github Slack Bot",
+  "description": "A bot that notifies people on Slack when Github events happen",
+  "website": "https://github.com/chendo/github-slack-bot",
+  "env": {
+    "SLACK_WEBHOOK_URL": {
+      "description": "A Slack incoming webhook URL"
+    },
+    "SLACK_CHANNEL": {
+      "description": "The Slack channel notifications get sent to."
+    },
+    "WEBHOOK_PATH": {
+      "description": "You should set this to something hard to guess, otherwise anyone who knows the webhook endpoint can send you Github events.",
+      "value": "/some-secret-path"
+    },
+    "STATUS_EVENTS": {
+      "description": "A comma-separated list of commit status types. Available are `pending`, `success`, `failure`, `error`. You may want to set this if you only want to be notified of failures/errors.",
+      "value": "success,failure,error"
+    },
+    "STATUS_CONTEXTS": {
+      "description": "A regular expression of commit status contexts to notify on. For example, `^buildkite\/` to only notify on [Buildkite](https://buildkite.com/) commit status events.",
+      "value": "success,failure,error"
+    },
+    "IGNORED_EVENTS": {
+      "description": "A comma-separated list of Github event keys. See `Webhook event name` on an event at https://developer.github.com/v3/activity/events/types/",
+      "value": ""
+    }
+  }
+}

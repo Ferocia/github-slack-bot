@@ -16,6 +16,8 @@ This Slack bot takes Github webhooks and pings relevant people on Slack on Githu
 
 Deploy it somewhere. Heroku makes it easy.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/chendo/github-slack-bot)
+
 Add a Github webhook and point it to where you've deployed it, factoring in `WEBHOOK_PATH` (see below), e.g. `https://my-github-slack-bot.herokuapp.com/secret-webhook-url`. You can choose to send all events or select the events you care about.
 
 ## Options
