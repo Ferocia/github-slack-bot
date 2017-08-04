@@ -190,6 +190,7 @@ class GithubSlackBot < Sinatra::Base
       payload = {
                   channel: SLACK_CHANNEL,
                   as_user: true,
+                  parse: 'full',
                 }.merge(data)
 
       puts YAML.dump(payload)
