@@ -36,6 +36,7 @@ Optional:
 * `STATUS_EVENTS` - Defaults to `success,failure,error`. A comma-separated list of commit status types. Available are `pending`, `success`, `failure`, `error`. You may want to set this if you only want to be notified of failures/errors.
 * `STATUS_CONTEXTS` - Defaults to ``. A regular expression of commit status contexts to notify on. For example, `^buildkite\/` to only notify on [Buildkite](https://buildkite.com/) commit status events.
 * `IGNORED_EVENTS` - Defaults to ``. A comma-separated list of Github event keys. See `Webhook event name` on an event at https://developer.github.com/v3/activity/events/types/
+* `HIDE_DIFFS` - When set, notifications won't render diffs.
 
 ## License
 

@@ -126,7 +126,7 @@ class GithubSlackBot < Sinatra::Base
         attachments[0][:title] += " - #{comment.path}:#{comment.line}"
       end
 
-      if diff_hunk
+      if diff_hunk && !ENV['HIDE_DIFFS']
         hunk = diff_hunk.sub(/^.+?\n/, '') # Strip out first line
         attachments << {
           title: diff_path,
