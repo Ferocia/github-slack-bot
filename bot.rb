@@ -12,7 +12,7 @@ class GithubSlackBot < Sinatra::Base
   SLACK_WEBHOOK_URL = ENV.fetch('SLACK_WEBHOOK_URL')
   SLACK_CHANNEL = ENV.fetch('SLACK_CHANNEL')
 
-  post ENV.fetch('WEBHOOK_PATH') do
+  post ENV.fetch('WEBHOOK_PATH', '/') do
     request.body.rewind
     data = JSON.parse(request.body.read)
 
@@ -32,6 +32,7 @@ class GithubSlackBot < Sinatra::Base
     end
 
     def process
+      return if ENV.fetch('IGNORED_EVENTS', '').split(/\s*,\s*/).include?(event)
       case event
       when 'status'
         process_status
@@ -51,7 +52,6 @@ class GithubSlackBot < Sinatra::Base
     protected
 
     def process_status
-      return if ENV['IGNORE_STATUS_EVENT']
       state = data.state
       context = data.context
       description = data.description
@@ -74,7 +74,6 @@ class GithubSlackBot < Sinatra::Base
     end
 
     def process_issue
-      return if ENV['IGNORE_ISSUE_EVENT']
       return unless %w(opened).include?(action)
 
       interested_parties = extract_usernames(issue_body)
@@ -100,7 +99,6 @@ class GithubSlackBot < Sinatra::Base
     end
 
     def process_issue_comment
-      return if ENV['IGNORE_COMMENT_EVENT']
       return unless %w(created edited opened).include?(action)
 
       interested_parties = extract_usernames(comment.body)
@@ -140,7 +138,6 @@ class GithubSlackBot < Sinatra::Base
     end
 
     def process_commit_comment
-      return if ENV['IGNORE_COMMIT_EVENT']
       interested_parties = extract_usernames(comment.body)
 
       attachments = [
@@ -208,7 +205,7 @@ class GithubSlackBot < Sinatra::Base
     end
 
     def extract_usernames(message)
-      message.scan(/(?=\b|^)(@\w+)\b/).flatten
+      message.scan(/(@\w+)\b/).flatten
     end
 
     def color_for_state(state)
