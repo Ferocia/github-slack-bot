@@ -57,8 +57,12 @@ class GithubSlackBot < Sinatra::Base
       description = data.description
       target_url = data.target_url
 
-      return unless ENV.fetch('STATUS_EVENTS', 'success,failure,error').split(/,/).include?(state)
+      return unless status_events.include?(state)
       return unless context =~ Regexp.new(ENV.fetch('STATUS_CONTEXTS', ''))
+      if status_branches && (status_branches & branches).none?
+        puts "Ignoring due to commit branches (#{branches.join(', ')}) not matching #{branches.join(', ')}"
+        return
+      end
 
       notify(["@#{commit_author}"], attachments: [
         {
@@ -254,8 +258,20 @@ class GithubSlackBot < Sinatra::Base
       data.action
     end
 
+    def status_events
+      @status_events ||= ENV.fetch('STATUS_EVENTS', 'success,failure,error').split(/,/)
+    end
+
+    def status_branches
+      @status_branches ||= ENV['STATUS_BRANCHES'] && ENV['STATUS_BRANCHES'].split(',')
+    end
+
     def branches
       (data.branches || []).map(&:name)
+    end
+
+    def branch
+      branches.first
     end
 
     def comment
