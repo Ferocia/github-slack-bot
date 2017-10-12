@@ -11,6 +11,7 @@ class GithubSlackBot < Sinatra::Base
 
   SLACK_WEBHOOK_URL = ENV.fetch('SLACK_WEBHOOK_URL')
   SLACK_CHANNEL = ENV.fetch('SLACK_CHANNEL')
+  SLACK_NOTIFY = ENV.fetch('SLACK_NOTIFY', nil)
 
   post ENV.fetch('WEBHOOK_PATH', '/') do
     request.body.rewind
@@ -166,6 +167,10 @@ class GithubSlackBot < Sinatra::Base
       slack_names = github_users.map do |github_user|
         self.class.github_to_slack_mapping[github_user] || github_user
       end.uniq.compact
+
+      if SLACK_NOTIFY
+        slack_names << SLACK_NOTIFY
+      end
 
       send_slack_message({
         channel: SLACK_CHANNEL,
