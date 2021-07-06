@@ -4,7 +4,9 @@ GEM
     excon (0.58.0)
     hashie (3.5.6)
     mustermann (1.0.0)
-    puma (3.9.1)
+    nio4r (2.5.7)
+    puma (4.3.8)
+      nio4r (~> 2.0)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
